@@ -7,7 +7,8 @@
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server --mode development",
     "test": "NODE_ENV=test jest --no-cache",
-    "test:watch": "NODE_ENV=test jest --watch"
+    "test:watch": "NODE_ENV=test jest --watch",
+    "lint": "eslint src --ext .js,.jsx"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
@@ -22,6 +23,7 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/react-hooks": "^5.0.3",
+    "@testing-library/user-event": "^13.1.9",
     "autoprefixer": "^9.6.1",
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.8.0",
@@ -43,8 +45,12 @@
     "jest": "^26.6.3",
     "jest-config": "^26.6.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
+    "jest-mock": "^27.0.3",
     "jest-styled-components": "^7.0.3",
+    "lodash.flatten": "^4.4.0",
     "postcss-loader": "^3.0.0",
+    "prop-types": "^15.7.2",
+    "react-icons": "^4.2.0",
     "stylelint": "^13.9.0",
     "stylelint-config-recommended": "^3.0.0",
     "stylelint-config-styled-components": "^0.1.1",

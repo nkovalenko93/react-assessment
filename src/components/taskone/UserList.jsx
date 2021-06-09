@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import useDebounce from '@hooks/useDebounce';
+import useFetch from '@hooks/useFetch';
+
 
 const Row = styled.div`
   display: flex;
@@ -7,12 +10,13 @@ const Row = styled.div`
   margin-bottom: 10px;
   border: 1px solid #000;
   padding: 20px;
-  
+
   span {
     display: block;
     margin-bottom: 5px;
   }
 `;
+
 
 const UserInfo = styled.div`
   border-right: 1px solid #000;
@@ -20,74 +24,37 @@ const UserInfo = styled.div`
   width: 260px;
 `;
 
+
 const Users = styled.div`
   max-height: 300px;
   overflow: scroll;
   margin-top: 15px;
 `;
 
-const debounce = (func, wait = 5000) => {
-  let timeout = null;
 
-  const cleanup = () => {
-    if (timeout) clearTimeout(timeout);
-  };
+const USERS_API_URL = 'https://jsonplaceholder.typicode.com/users';
+const SEARCH_TIMEOUT = 5000;
 
-  return () => {
-    cleanup();
+const UserList = () => {
+  const [filter, setFilter] = useState('');
+  const debouncedFilter = useDebounce(filter, SEARCH_TIMEOUT);
+  const users = useFetch(USERS_API_URL, debouncedFilter ? { username: debouncedFilter } : {}) || [];
 
-    timeout = setTimeout(func, wait);
-  };
-};
-
-export default class UserList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      data: [],
-      filter: '',
-      value: ''
-    };
-  }
-
-  fetchData = () => {
-    const { filter } = this.state;
-    fetch(`https://jsonplaceholder.typicode.com/users${filter ? `?username=${encodeURIComponent(filter)}` : ''}`).then(async (response) => {
-      const data = await response.json();
-      this.setState({ data });
-    });
-  }
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  render() {
-    const { data, value } = this.state;
-
-    const setFilter = (e) => {
-      this.setState({ value: e.target.value });
-      const debounceFn = debounce((e) => {
-        this.setState({ filter: e.target.value }, this.fetchData);
-      });
-
-      debounceFn(e);
-    };
-
-    return (
+  return (
+    <div>
       <div>
-        <div>
-          Filter:
-          <input
-            type="text"
-            onChange={setFilter}
-            value={value}
-            placeholder="Enter username"
-          />
-        </div>
-        <Users>
-          {data.map((user) => (
+        Filter:
+        <input
+          data-testid="filter"
+          type="text"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder="Enter username"
+        />
+      </div>
+      <Users id="user-list">
+        {
+          users.map((user) => (
             <Row key={user.id}>
               <UserInfo>
                 <span>{`Name: ${user.name}`}</span>
@@ -106,9 +73,12 @@ export default class UserList extends Component {
                 </div>
               </div>
             </Row>
-          ))}
-        </Users>
-      </div>
-    );
-  }
-}
+          ))
+        }
+      </Users>
+    </div>
+  );
+};
+
+
+export default UserList;

@@ -1,0 +1,18 @@
+.delete-report .report-multiselect {
+    width: 100%;
+    color: #336da0;
+    margin-top: 40px;
+}
+
+.delete-report .delete-report-input-label {
+    margin-top: 15px;
+}
+
+.delete-report .delete-report-input {
+    margin-top: 5px;
+}
+
+.delete-report-footer {
+    float: right;
+    margin-top: 15px;
+}

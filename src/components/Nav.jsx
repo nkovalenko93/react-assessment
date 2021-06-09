@@ -46,6 +46,12 @@ const Nav = () => (
     >
       Task Two
     </NavButton>
+    <NavButton
+      activeClassName="active"
+      to="/task-two-demo"
+    >
+      Task Two Demo
+    </NavButton>
   </NavWrapper>
 );
 
